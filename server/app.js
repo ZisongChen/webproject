@@ -7,7 +7,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const cors = require('cors');
 const { ObjectId } = require('mongodb');
-
+//This code sets up a Node.js server using Express and several middleware modules including CORS, cookie-parser, and logger. It also connects to a MongoDB database using Mongoose.
 require("dotenv").config();
 var app = express();
 app.use(
@@ -59,6 +59,7 @@ app.use(
   algorithms:["HS256"],
 })
 )
+//make above routes can use jwt
 var jwt = require('jsonwebtoken');
 var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
 
@@ -75,7 +76,7 @@ function guid() {
           v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
   });
-}
+}//password Encryption
 app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
@@ -85,17 +86,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 const mongoose = require('mongoose');
 const { time } = require('console');
 mongoose.connect('mongodb://127.0.0.1:27017/testdb');
-
+//connect mongoose
 const users = mongoose.model('users', {email:String,password:String});
 const posts = mongoose.model('posts', {email:String,post:String,title:String,time:String,language:String});
 const comments = mongoose.model('comments', {email:String,comment:String,id:mongoose.Schema.Types.ObjectId,time:String});
+//build categories in mongodb
 app.post("/api/user/register/", (req, res) => {
+  //register router
   var rusername=req.body.email;
   var ruserpassword=req.body.password;
   var j=0;
   users.findOne({email:rusername},function(err,food){
     if(!food||err){
-      
+      //if there are no same email in mongodb,then register
       var password = bcrypt.hashSync(ruserpassword, salt);
       var id=guid();
       new  users({
@@ -111,29 +114,25 @@ app.post("/api/user/register/", (req, res) => {
       });
     }
     else{
+      //there exists same username
       return res.status(403).json("Email already in use");
     }
     
   })
 })
 
-app.post("/api/email", (req, res) => {
-  const email = req.auth.email;
-    res.send({
-      email: email,
-    })
-  })
+
   app.post("/api/search", (req, res) => {
     var l = [];
     var word = req.body.word;
-  
+  //get the word needed to find
     posts
       .find({
         $or: [
           { post: { $regex: word, $options: "i" } },
           { title: { $regex: word, $options: "i" } },
         ],
-      })
+      })//if word in the title or post of a post then send it to a list
       .then((posts) => {
         posts.forEach((post) => {
           l.push(post);
@@ -153,6 +152,7 @@ app.post("/api/user/login", (req, res) => {
   var pass=req.body.password;
   
   users.findOne({email:name},function(err,food){
+    //find in exist email
     if(!food||err){
       
       res.status(401).send({
@@ -165,17 +165,17 @@ app.post("/api/user/login", (req, res) => {
       item=food;
       console.log(item)
       let password1=item.password
-      let correctpass= bcrypt.compareSync(pass,password1)
+      let correctpass= bcrypt.compareSync(pass,password1)//ensure the correctness of password
       if(correctpass){
         const jwtPayload = {
           email: name,
           id:item.id
-        }
+        }//store message in jwt
         jwt.sign(
           jwtPayload,
           process.env.SECRET,
           {
-            expiresIn: "100m"
+            expiresIn: "100m"//Duration of accreditation
           },
           (err, token) => {
             return res.json({success: true, token});
@@ -185,28 +185,21 @@ app.post("/api/user/login", (req, res) => {
           return res.status(401).send({
             "success": false,
             "msg": "Invalid credentials",
-          });
+          });//success
       }   
     }
     
   })
 })
-app.post("/api/user/adminlogin", (req, res) => {
-  var name=req.body.email;
-  var pass=req.body.password;
-  if (name=="aaaa" &&pass=="1111"){
-    res.json({success: true, "token":"admin"})
-  }
-  res.json({success: false, "msg":"wrong"})
-})
+
 app.post("/api/private", (req, res) => {
   if(!req.auth.email){
     res.send("unauthorized");
-  }
+  }//Validation
   var now = new Date();
   console.log(now.toString())
   var aa=req.auth.email;
-  var post=req.body;
+  var post=req.body;//get infomation
   new posts({
     email:aa,
     post:post.word,
@@ -215,21 +208,19 @@ app.post("/api/private", (req, res) => {
     language:post.language
   }).save(function(err){
     if (err) return handleError(err);
-  })
+  })//save in mongodb
   res.send({"post":"post success"});
   
 
-});
+});//store post
 app.post("/api/comment", (req, res) => {
   if(!req.auth.email){
     res.send("unauthorized");
-  }
+  }//Validation
 
-  var aa=req.auth.email;
+  var aa=req.auth.email;//get infomation
   var ww=req.body;
-  if (ww.word==""){
-    res.send({"comment":"comment should no be null"});
-  }
+
   var now = new Date();
   console.log(
     ww.language
@@ -246,7 +237,7 @@ app.post("/api/comment", (req, res) => {
   res.send({"comment":"comment success"});
   
 
-});
+});//store comments
 app.post("/api/posts", (req, res) => {
   var l = [];
 
@@ -263,7 +254,7 @@ app.post("/api/posts", (req, res) => {
 
     res.json({ list: l });
   });
-});
+});//collect all posts
 app.post("/api/commentlist", (req, res) => {
   var l = [];
   var postid=req.body
@@ -284,7 +275,7 @@ app.post("/api/commentlist", (req, res) => {
 
     res.json({ list: l });
   });
-});
+});//collect all comments for related post
 app.post("/api/editpost", (req, res) => {
   if (!req.auth.email) {
     res.send("unauthorized");
@@ -314,7 +305,7 @@ app.post("/api/editpost", (req, res) => {
       foundPost.title = newTitle;
       foundPost.post = newPost;
       foundPost.time = time;
-
+      //if you are the admin account or the owner of the post,you can edit it
       foundPost.save((err) => {
       if (err) {
         console.error(err);
@@ -362,7 +353,7 @@ app.post("/api/editcomment", (req, res) => {
     if (foundPost.email == email || email=="admin") {
           foundPost.comment = newComment;
     foundPost.time = time;
-    
+    //if you are the admin account or the owner of the post,you can edit it
     foundPost.save((err) => {
       if (err) {
         console.error(err);
@@ -387,27 +378,13 @@ app.post("/api/deletec", (req, res, next) => {
     comments.findOneAndDelete({_id:com}, function (err, co) {
       if (err) throw err;
       console.log({co});
-      return res.send({"msg": "success delete"})
+      return res.send({"msg": "success delete"})//deleted related comment
   });
   }
 
 });
 
-app.post("/api/deletep", (req, res, next) => {
-  const pi = req.body.id;
-  if(req.auth.email=="admin"){
-    posts.findOneAndDelete({_id:pi}, function (err, co) {
-    if (err) throw err;
-    console.log({co});
-    return res.send({"msg": "success delete"})
-  });
-  }
 
-  
-
-  
-  
-});
 
 app.post("/api/deletepc", (req, res, next) => {
   const pi = req.body.id;
@@ -417,7 +394,7 @@ app.post("/api/deletepc", (req, res, next) => {
       if (err) throw err;
       console.log({co});
     });
-
+//deleted post-related comments
   }
   if(req.auth.email=="admin"){
     posts.findOneAndDelete({_id:pi}, function (err, co) {
@@ -425,7 +402,7 @@ app.post("/api/deletepc", (req, res, next) => {
     console.log({co});
     return res.send({"msg": "success delete"})
   });
-  }
+  }//deleted related post
  
 });
 
