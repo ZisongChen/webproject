@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AppBar, Toolbar, Button } from '@mui/material';
 
 const Header = () => {
-  
+  //you can go to other page by pressing button
   return (
     <AppBar position="static">
       <Toolbar>
