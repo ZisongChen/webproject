@@ -12,6 +12,7 @@ const Login = () => {
         setlog({ ...log, [e.target.id]: e.target.value });
       };
       const logout=()=>{
+        //when you choose to logout it will remove the authentication from localstorage
         localStorage.removeItem("auth_token");
         setlog({ ...log, login: false })
       }
@@ -31,7 +32,7 @@ const Login = () => {
           if(data.success){
             
           alert("login successfully")
-          localStorage.setItem("auth_token", data.token);
+          localStorage.setItem("auth_token", data.token);// save the authentication in localstorage
             setlog({ ...log, login: true })
           }else{
           alert(JSON.stringify(data.msg))
@@ -41,7 +42,7 @@ const Login = () => {
     return(
         <>
           
-          {localStorage.getItem("auth_token")?(
+          {localStorage.getItem("auth_token")?(//if  login show log out
             <>
             <h1>logout</h1>
             <button onClick={logout}>logout</button>
