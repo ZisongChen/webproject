@@ -6,7 +6,7 @@ describe('search', () => {
       cy.get('#password').type("zz")
       cy.get('[type="submit"]').click()
       cy.get('[href="/"]').click()
-      cy.get('[href="/comments?postId=6403b78e82b961548b70213a"]').click()
+      cy.get('[href="/comments?postId=6403cceaa636a2f54f64122a"]').click()
       cy.get('#word').type("ww")
       cy.get('#comments').click()
     })
