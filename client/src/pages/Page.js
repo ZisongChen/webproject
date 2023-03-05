@@ -8,7 +8,6 @@ import './pagess.css'
 import { Container, Button } from '@mui/material';
 const Page = () => {
   const [postList, setPostList] = useState([]);
-  var postId;
   const [currentPage, setCurrentPage] = useState(0);
   const postsPerPage = 10;
   const [updateComments, setUpdateComments] = useState(0);
@@ -22,9 +21,11 @@ const Page = () => {
       .then(response => response.json())
       .then(data => setPostList(data.list))
       .catch(error => console.log(error));
-
+      hljs.highlightAll()
   },[updateComments]);
+  //use to show the posts and update when "updateComments" changes
     hljs.highlightAll()
+  //highlight the code of post
     const [post, setpost] = useState({
         title:"",
         word:"",
@@ -33,8 +34,9 @@ const Page = () => {
 
       const handleChange = e => {
         setpost({ ...post, [e.target.id]: e.target.value });
-      };
+      };//change the related things in post
       var token=localStorage.getItem("auth_token");
+
       const handleclick = async (event) => {
 
 
@@ -47,7 +49,7 @@ const Page = () => {
             },
             body: JSON.stringify(post)
             })
-            setUpdateComments(updateComments + 1);
+            setUpdateComments(updateComments + 1);//update the page
             const res = await aaa.json()
             
 
@@ -65,18 +67,10 @@ const Page = () => {
             body: JSON.stringify(postid)
             })
 
-        // const aaa = await fetch('http://localhost:1234/api/deletep', {
-        //     method: 'POST',
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": "Bearer " + token,
-        //     },
-        //     body: JSON.stringify(postid)
-        //     })
             const res = await aa.json();
             setUpdateComments(updateComments + 1);
-            setUpdateComments(updateComments + 1);
-            alert(res.msg)
+
+            alert(res.msg)// get the feedback and alert it
       }
 
     return(
@@ -85,22 +79,23 @@ const Page = () => {
       <Container><h1>Posts</h1></Container>
       {postList.slice(currentPage * postsPerPage, (currentPage + 1) * postsPerPage).map((item) => {
       const key = item._id
-
+//used to be a pager and list the posts one by one and the features they should have
  
-  return (
-    <Container>
-    <div key={key}>
-      <h2>Title:{item.title}</h2>
-      <pre>
-        <code className={"language-"+item.language+""}>{item.post}</code></pre>
-      <p>by {item.email}</p>
+        return (
+          <Container>
+          <div key={key}>
+            <h2>Title:{item.title}</h2>
+            <pre>
+              <code className={"language-"+item.language+""}>{item.post}</code></pre>
+              {/* //set the language for highlight */}
+            <p>by {item.email}</p>
 
-      <p>last modified:{item.time}</p>
-      <Button component={Link} to={{ pathname: '/comments', search: `?postId=${key}` }}>View Comments</Button>
-      <Button component={Link} to={{ pathname: '/edit', search: `?postId=${key}` }}>Edit Post</Button>
-      <Button onClick={()=>handleDelete(key)}>Delete</Button>
-    </div>
-    </Container>
+            <p>last modified:{item.time}</p>
+            <Button component={Link} to={{ pathname: '/comments', search: `?postId=${key}` }}>View Comments</Button>//used to see comments
+            <Button component={Link} to={{ pathname: '/edit', search: `?postId=${key}` }}>Edit Post</Button>
+            <Button onClick={()=>handleDelete(key)}>Delete</Button>
+          </div>
+          </Container>
 
   );
 })}
@@ -115,7 +110,8 @@ const Page = () => {
             />
             </>
             </Container>
-          {localStorage.getItem("auth_token")?(
+            {/* //the pager of posts */}
+          {localStorage.getItem("auth_token")?(//if you login then show following stuff, they are the component to send posts
             <Container>
             <>
             <TextField label="title" variant='outlined' color='secondary' id="title"  value={post.title} onChange={handleChange}/>
@@ -138,7 +134,7 @@ const Page = () => {
             <button id="post"  onClick={handleclick}>post</button>
             </>
             </Container>
-          ):(
+          ):(//you are not login
             <Container>
             <>
             <h1>no allowed to post your code without login</h1>
