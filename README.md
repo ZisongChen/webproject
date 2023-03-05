@@ -1,2 +1,2 @@
 # webproject
-my document is in document.docx
+my document is in document.pdf
