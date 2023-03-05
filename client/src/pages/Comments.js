@@ -8,7 +8,7 @@ const Comments = (props) => {
   const [updateComments, setUpdateComments] = useState(0);
    const [postList, setPostList] = useState([]);
    const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
+  const queryParams = new URLSearchParams(search);//get the param from last page
   const postId = queryParams.get('postId');
   var id={"postId":postId}
   var ww=0
@@ -24,7 +24,7 @@ const Comments = (props) => {
       .then(response => response.json())
       .then(data => setPostList(data.list))
       .catch(error => console.log(error));
-  },[updateComments]);
+  },[updateComments]);  //use to show the comments and update page when "updateComments" changes
     const [comments, setcomments] = useState({
         word:"",
         postId:postId
@@ -33,7 +33,7 @@ const Comments = (props) => {
       const handleChange = e => {
         setcomments({ ...comments, [e.target.id]: e.target.value });
       };
-      var token=localStorage.getItem("auth_token");
+      var token=localStorage.getItem("auth_token");//get authentication
       const handleclick = async (event) => {
         console.log(comments)
         const a = await fetch('http://localhost:1234/api/comment', {
@@ -44,13 +44,13 @@ const Comments = (props) => {
             },
             body: JSON.stringify(comments)
             });
-            setUpdateComments(updateComments + 1);
+            setUpdateComments(updateComments + 1);//update page
 
       };
       const handleDelete = async (key) => {
         try {
           var postid={"id":key}
-          var token=localStorage.getItem("auth_token");
+          var token=localStorage.getItem("auth_token");//get authentication
           console.log(postid);
           const aaa = await fetch('http://localhost:1234/api/deletec', {
             method: 'POST',
@@ -62,7 +62,7 @@ const Comments = (props) => {
           });
                   
           const res = await aaa.json();
-          setUpdateComments(updateComments + 1);
+          setUpdateComments(updateComments + 1);//update page
           alert(res.msg)
         } catch (error) {
           console.log(error);
@@ -75,7 +75,7 @@ const Comments = (props) => {
         <h1>Comments for Post {postId}</h1>
       {postList.map((item) => {
   const key = item._id ? item._id.toString() : null;
- 
+ //show all comments for the related post
   return (
     <Container>
     <div key={key}>
@@ -88,7 +88,7 @@ const Comments = (props) => {
     </div></Container>
   );
 })}
-          {localStorage.getItem("auth_token")?(
+          {localStorage.getItem("auth_token")?(//if you login then show following stuff, they are the component to send comments
             <Container>
             <>
             <TextField label="comments" variant='outlined' color='secondary' id="word"  value={comments.word} onChange={handleChange}/>
@@ -96,7 +96,7 @@ const Comments = (props) => {
             <button id="comments"  onClick={handleclick}>comment</button>
             </>
             </Container>
-          ):(
+          ):(//you are not login
             <Container>
             <>
             <h1>no allowed to comment without login</h1>
