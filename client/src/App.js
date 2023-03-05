@@ -10,7 +10,7 @@ import Commentsedit from './pages/Commentsedit'
 import Search from './pages/Search'
 
 function App() {
-  //you can go to other page by pressing button
+  // build path so that you can go to other page
   return (
     <Router>
       <Header/>
