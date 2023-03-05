@@ -6,9 +6,10 @@ describe('search', () => {
       cy.get('#password').type("zz")
       cy.get('[type="submit"]').click()
       cy.get('[href="/"]').click()
-      cy.get('[href="/comments?postId=6403b78e82b961548b70213a"]').click()
-      cy.get(':nth-child(4) > div > a.MuiButtonBase-root').click()
-      cy.get('#word').type("zz")
+      cy.get('[href="/comments?postId=6403cceaa636a2f54f64122a"]').click()
+      cy.get(':nth-child(3) > div > a.MuiButtonBase-root').click()
+      cy.get('#word').type("ss")
+
       cy.get('#edit').click()
     })
   })
