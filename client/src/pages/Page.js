@@ -91,7 +91,7 @@ const Page = () => {
             <p>by {item.email}</p>
 
             <p>last modified:{item.time}</p>
-            <Button component={Link} to={{ pathname: '/comments', search: `?postId=${key}` }}>View Comments</Button>//used to see comments
+            <Button component={Link} to={{ pathname: '/comments', search: `?postId=${key}` }}>View Comments</Button>
             <Button component={Link} to={{ pathname: '/edit', search: `?postId=${key}` }}>Edit Post</Button>
             <Button onClick={()=>handleDelete(key)}>Delete</Button>
           </div>
