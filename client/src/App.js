@@ -21,7 +21,7 @@ function App() {
         <Route path="/Edit" element={<Edit />}/>
         <Route path="/Commentsedit" element={<Commentsedit />}/>
         <Route path="/Search" element={<Search />}/>
-
+        //build pathes to the other pages
       </Routes>
     </Router>
   );
