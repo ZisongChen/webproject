@@ -196,7 +196,7 @@ app.post("/api/private", (req, res) => {
   if(!req.auth.email){
     res.send("unauthorized");
   }//Validation
-  var now = new Date();
+  var now = new Date();//show the time for posting
   console.log(now.toString())
   var aa=req.auth.email;
   var post=req.body;//get infomation
@@ -221,7 +221,7 @@ app.post("/api/comment", (req, res) => {
   var aa=req.auth.email;//get infomation
   var ww=req.body;
 
-  var now = new Date();
+  var now = new Date();//show the time for commenting
   console.log(
     ww.language
   );
@@ -286,7 +286,7 @@ app.post("/api/editpost", (req, res) => {
   const postId = aa.postId;
   const newPost = aa.word;
   const newTitle = aa.title;
-  const now = new Date();
+  const now = new Date();//show the time for editing
   const time = now.toString();
   
   posts.findOne({ _id: postId }, (err, foundPost) => {
@@ -335,7 +335,7 @@ app.post("/api/editcomment", (req, res) => {
 
   );
   const newComment = aa.word;
-  const now = new Date();
+  const now = new Date();//show the time for editing
   const time = now.toString();
   
   comments.findOne({ _id: commentId }, (err, foundPost) => {
