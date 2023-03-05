@@ -3,7 +3,7 @@ const Register = () => {
     const [res, setres] = useState({
         email: "",
         password: ""
-      })
+      })//used for the change of the information and save them
       const handleChange = e => {
         setres({ ...res, [e.target.id]: e.target.value });
       };
@@ -18,7 +18,7 @@ const Register = () => {
             },
             body: JSON.stringify(res)
           });
-          const data = await response.json();
+          const data = await response.json();//send information to server
           console.log(data)
           alert(JSON.stringify(data))
         } catch (error) {
