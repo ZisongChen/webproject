@@ -5,7 +5,7 @@ const Commentsedit = (props) => {
    const [commentList, setcommentList] = useState([]);
    const { search } = useLocation();
   const queryParams = new URLSearchParams(search);
-  const commentId = queryParams.get('commentId');
+  const commentId = queryParams.get('commentId');//for getting the params send from above page
 
     const [newcw, setnewcw] = useState({
 
@@ -15,8 +15,8 @@ const Commentsedit = (props) => {
 
       const handleChange = e => {
         setnewcw({ ...newcw, [e.target.id]: e.target.value });
-      };
-      var token=localStorage.getItem("auth_token");
+      };//function for change related thing in newcw
+      var token=localStorage.getItem("auth_token");//authentication is stored in localstorage
       const handleclick = async (event) => {
         console.log(newcw)
         const a = await fetch('http://localhost:1234/api/editcomment', {
@@ -34,7 +34,7 @@ const Commentsedit = (props) => {
         
         <>
         <h1>Edit for Comments {commentId}</h1>
-          {localStorage.getItem("auth_token")?(
+          {localStorage.getItem("auth_token")?(//if you login then show following stuff, they are the component to edit comments
             <>
             <TextField label="new word" variant='outlined' color='secondary' id="word"  value={newcw.word} onChange={handleChange}/>
             <p></p>
