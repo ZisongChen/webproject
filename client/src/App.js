@@ -10,6 +10,7 @@ import Commentsedit from './pages/Commentsedit'
 import Search from './pages/Search'
 
 function App() {
+  //you can go to other page by pressing button
   return (
     <Router>
       <Header/>
@@ -21,7 +22,7 @@ function App() {
         <Route path="/Edit" element={<Edit />}/>
         <Route path="/Commentsedit" element={<Commentsedit />}/>
         <Route path="/Search" element={<Search />}/>
-        //build pathes to the other pages
+
       </Routes>
     </Router>
   );
